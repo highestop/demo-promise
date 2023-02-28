@@ -1,0 +1,8 @@
+{
+    "name": "promise",
+    "description": "一次性发布订阅事件的 promise 封装",
+    "author": "highestop",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "src/index.ts"
+}
