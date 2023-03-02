@@ -5,11 +5,7 @@ export function usePromise<T, R = T>(promise: Promise<T>, defaultValue: T, catch
 export function usePromise<T, R>(promise: Promise<T>, defaultValue?: T, catchError?: (e: any) => void) {
     const [state, setState] = useState<T | undefined>(defaultValue)
     useEffect(() => {
-        promise
-            .then((data) => setState(data))
-            .catch((e) => {
-                catchError?.(e)
-            })
+        promise.then((data) => setState(data)).catch((e) => catchError?.(e))
     }, [])
     return state
 }
