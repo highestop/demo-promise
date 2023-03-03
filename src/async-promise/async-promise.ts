@@ -35,11 +35,15 @@ export function asyncPromise<T>() {
     }
     const _completed = () => _content.status !== 'pending'
 
+    // fulfill impl
     const _fulfilledCallbacks: Set<AsyncPromiseResolveCallback<T>> = new Set()
     const _then = (callback: AsyncPromiseResolveCallback<T>) => {
-        _fulfilledCallbacks.add(callback)
-        if (_completed() && _content.status === 'fulfilled') {
-            callback(_content.result)
+        if (_completed()) {
+            if (_content.status === 'fulfilled') {
+                callback(_content.result)
+            }
+        } else {
+            _fulfilledCallbacks.add(callback)
         }
     }
     const _resolve: AsyncPromiseResolve<T> = (t) => {
@@ -48,11 +52,15 @@ export function asyncPromise<T>() {
         _content = { status: 'fulfilled', result: t }
     }
 
+    // reject impl
     const _throwCallbacks: Set<AsyncPromiseRejectCallback> = new Set()
     const _catch = (callback: AsyncPromiseRejectCallback) => {
-        _throwCallbacks.add(callback)
-        if (_completed() && _content.status === 'rejected') {
-            callback(_content.result)
+        if (_completed()) {
+            if (_content.status === 'rejected') {
+                callback(_content.result)
+            }
+        } else {
+            _throwCallbacks.add(callback)
         }
     }
     const _reject: AsyncPromiseReject = (e) => {
@@ -61,6 +69,7 @@ export function asyncPromise<T>() {
         _content = { status: 'rejected', result: e }
     }
 
+    // promise handler
     const _promise = {
         then: (callback: AsyncPromiseResolveCallback<T>) => {
             _then(callback)
@@ -72,6 +81,7 @@ export function asyncPromise<T>() {
         }
     }
 
+    // result getter
     const _result = () => _content.status === 'fulfilled' ? _content.result : undefined
 
     return Object.freeze({
