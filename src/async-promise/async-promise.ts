@@ -36,19 +36,29 @@ export function asyncPromise<T>() {
     const _completed = () => _content.status !== 'pending'
 
     const _fulfilledCallbacks: Set<AsyncPromiseResolveCallback<T>> = new Set()
-    const _then = (callback: AsyncPromiseResolveCallback<T>) => _fulfilledCallbacks.add(callback)
+    const _then = (callback: AsyncPromiseResolveCallback<T>) => {
+        _fulfilledCallbacks.add(callback)
+        if (_completed() && _content.status === 'fulfilled') {
+            callback(_content.result)
+        }
+    }
     const _resolve: AsyncPromiseResolve<T> = (t) => {
-        _content = { status: 'fulfilled', result: t }
         _fulfilledCallbacks.forEach(callback => callback(t))
         _fulfilledCallbacks.clear()
+        _content = { status: 'fulfilled', result: t }
     }
 
     const _throwCallbacks: Set<AsyncPromiseRejectCallback> = new Set()
-    const _catch = (callback: AsyncPromiseRejectCallback) => _throwCallbacks.add(callback)
+    const _catch = (callback: AsyncPromiseRejectCallback) => {
+        _throwCallbacks.add(callback)
+        if (_completed() && _content.status === 'rejected') {
+            callback(_content.result)
+        }
+    }
     const _reject: AsyncPromiseReject = (e) => {
-        _content = { status: 'rejected', result: e }
         _throwCallbacks.forEach(callback => callback(e))
         _throwCallbacks.clear()
+        _content = { status: 'rejected', result: e }
     }
 
     const _promise = {
