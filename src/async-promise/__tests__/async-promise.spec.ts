@@ -182,7 +182,7 @@ describe("订阅 then/catch 与调用 resolve/reject", () => {
             obj.promise.catch(rejectFn)
             obj.resolve()
         })
-        test("rejectFn 会被同步调用", () => {
+        test("rejectFn 不会被调用", () => {
             expect(rejectFn).not.toBeCalled()
         })
     })
