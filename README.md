@@ -1,1 +1,1 @@
-# promise
+# demo-promise
