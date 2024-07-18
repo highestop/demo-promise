@@ -12,15 +12,15 @@ export function promise<T>(): Readonly<{
     let resolve: (v: T) => void
     let reject: (e: Error) => void
     const abort = () => {
-        if (status === 'pending') {
-            status = 'aborted'
+        if (status === 'pending') {
+            status = 'aborted'
         } else {
             throw Error(`promise status is ${status}, cannot abort.`)
         }
     }
     const promise = new Promise<T>((_resolve, _reject) => {
         resolve = (t: T) => {
-            if (status === 'pending') {
+            if (status === 'pending') {
                 _resolve(t)
                 status = 'fulfilled'
             } else {
@@ -28,7 +28,7 @@ export function promise<T>(): Readonly<{
             }
         }
         reject = (e?: Error) => {
-            if (status === 'pending') {
+            if (status === 'pending') {
                 _reject(e)
                 status = 'rejected'
             } else {
