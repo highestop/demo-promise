@@ -1,4 +1,5 @@
 module.exports = {
-    testEnvironment: 'node',
+    // testEnvironment: 'node',
+    testEnvironment: 'jsdom',
     preset: 'ts-jest',
 };
