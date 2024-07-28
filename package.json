@@ -1,6 +1,4 @@
 {
-    "name": "promise",
-    "version": "1.0.0",
     "scripts": {
         "test": "jest --verbose --runInBand",
         "test:watch": "jest --verbose --runInBand --watchAll"
